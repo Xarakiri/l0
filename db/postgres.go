@@ -217,7 +217,7 @@ func (r *PostgresRepository) ListOrders(ctx context.Context) ([]schema.Order, er
 func (r *PostgresRepository) listItems(ctx context.Context, orderUid string) ([]schema.Item, error) {
 	// Get list of items
 	var items []schema.Item
-	rows, err := r.db.Query(`SELECT * FROM item i JOIN (SELECT * FROM order_item WHERE order_id=$1) t2 ON i.rid=t2.item_id;`, orderUid)
+	rows, err := r.db.Query(`SELECT rid, chrt_id, track_number, price, name, sale, size, total_price, nm_id, brand, status FROM item i JOIN (SELECT * FROM order_item WHERE order_id=$1) t2 ON i.rid=t2.item_id`, orderUid)
 	for rows.Next() {
 		item := schema.Item{}
 		if err = rows.Scan(&item.Rid, &item.ChrtID, &item.TrackNumber, &item.Price, &item.Name, &item.Sale, &item.Size, &item.TotalPrice, &item.NmID, &item.Brand, &item.Status); err == nil {
